@@ -12,6 +12,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script id="GH_PAGES_ROOT_REDIRECT">
+      // If deployed to GitHub Pages root instead of /docs, redirect to /docs/ where bundled assets live
+      if (location.hostname.includes('github.io') && !location.pathname.includes('/docs')) {
+        var base = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
+        location.replace(base + 'docs/' + location.search + location.hash);
+      }
+    </script>
   </head>
   <body class="bg-[#0B1120] text-slate-100 antialiased selection:bg-amber-500/30 selection:text-amber-200">
     <div id="root">

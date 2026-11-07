@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx server.ts",
     "build": "vite build && cp dist/index.html dist/404.html",
-    "build:docs": "vite build && cp dist/index.html dist/404.html && rm -rf docs && cp -r dist docs",
+    "build:docs": "vite build && cp dist/index.html dist/404.html && rm -rf docs && cp -r dist docs && node -e \"const fs=require('fs'); let h=fs.readFileSync('docs/index.html','utf8').replace(/<script id=\\\"GH_PAGES_ROOT_REDIRECT\\\"[\\s\\S]*?<\\/script>/,''); fs.writeFileSync('docs/index.html',h); fs.writeFileSync('docs/404.html',h);\"",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "start": "NODE_ENV=production tsx server.ts",
