@@ -37,11 +37,13 @@ export class SpeechService {
         body: JSON.stringify({ text: cleanText, dialect }),
       });
 
-      const data = await res.json();
-      if (data.success && data.audioBase64) {
-        this.audioCache.set(cacheKey, data.audioBase64);
-        this.playBase64Wav(data.audioBase64, onEnd);
-        return;
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.audioBase64) {
+          this.audioCache.set(cacheKey, data.audioBase64);
+          this.playBase64Wav(data.audioBase64, onEnd);
+          return;
+        }
       }
     } catch (err) {
       console.warn('Gemini TTS fetch failed, falling back to Web Speech synthesis:', err);

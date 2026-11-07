@@ -125,7 +125,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <div className="lg:col-span-5 relative">
               <div className="relative rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-900 group">
                 <img
-                  src="/src/assets/images/hero_academy_learning_1794061714788.jpg"
+                  src="./assets/images/hero_academy_learning_1794061714788.jpg"
                   alt="Kurdish Arabic Academy Learning Library"
                   className="w-full h-80 sm:h-96 object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   referrerPolicy="no-referrer"

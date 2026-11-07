@@ -213,13 +213,82 @@ export const AITutorView: React.FC<AITutorViewProps> = ({
         }),
       });
 
-      const resData = await res.json();
-      if (resData.success && resData.data) {
-        setGeneratedWords(resData.data);
-        StorageService.addXP(20);
+      if (res.ok) {
+        const resData = await res.json();
+        if (resData.success && resData.data) {
+          setGeneratedWords(resData.data);
+          StorageService.addXP(20);
+          return;
+        }
       }
+      throw new Error('Generate words API returned non-OK');
     } catch (err) {
-      console.error('Word generator error:', err);
+      console.warn('Word generator server unreachable, using offline dictionary generator:', err);
+      // Fallback offline curated vocabulary for learners
+      const fallbackList = [
+        {
+          id: `fw_${Date.now()}_1`,
+          arabic: activeDialect === 'iraqi' ? 'عاشت إيدك' : 'سلمت يداك',
+          arabicTashkeel: activeDialect === 'iraqi' ? 'عَاشَت إِيدَك' : 'سَلِمَتْ يَدَاكَ',
+          kurdishBadini: 'دەستێن تە ساخ بن / دەستخۆش',
+          kurdishSorani: 'دەستت خۆش بێت',
+          kurdishPhonetic: 'عاشەت یدەک',
+          english: 'Well done / bless your hands',
+          usageContext: 'بۆ سوپاسگوزاری و دەستخۆشی بەکاردێت',
+          exampleArabic: 'عاشت إيدك على هذا الجهد والشغل الحلو',
+          exampleKurdish: 'دەستت خۆش بێت بۆ ئەم هەوڵ و ئیشە جوانە',
+        },
+        {
+          id: `fw_${Date.now()}_2`,
+          arabic: activeDialect === 'iraqi' ? 'تدلل عيني' : 'على الرحب والسعة',
+          arabicTashkeel: activeDialect === 'iraqi' ? 'تِدَلَّل عِينِي' : 'عَلَى الرُّحْبِ وَالسَّعَةِ',
+          kurdishBadini: 'سەر چاڤا عەزیزم / فەرموو',
+          kurdishSorani: 'سەرچاوان / بەسەرچاو',
+          kurdishPhonetic: 'تدەللەل عەینی',
+          english: 'At your service / you are welcome',
+          usageContext: 'بۆ ڕێزگرتن و وەڵامدانەوەی داواکاری',
+          exampleArabic: 'أي شي تحتاجه تدلل عيني إحنا بخدمتك',
+          exampleKurdish: 'هەر شتێکت پێویستە سەرچاو ئێمە لە خزمەتین',
+        },
+        {
+          id: `fw_${Date.now()}_3`,
+          arabic: activeDialect === 'iraqi' ? 'ماكو مشكلة' : 'لا توجد مشكلة',
+          arabicTashkeel: activeDialect === 'iraqi' ? 'مَاكُو مُشْكِلَة' : 'لَا تُوجِدُ مُشْكِلَة',
+          kurdishBadini: 'چ ئاریشە نینە',
+          kurdishSorani: 'هیچ کێشەیەک نییە',
+          kurdishPhonetic: 'ماکوو موشکلی',
+          english: 'No problem / no issue',
+          usageContext: 'بۆ دڵنیادان لە نەبوونی کێشە لە مامەڵە یان گفتوگۆ',
+          exampleArabic: 'ماكو مشكلة، نلتقي باچر إن شاء الله',
+          exampleKurdish: 'کێشە نییە، بەیانی یەک دەبینین ان شاء الله',
+        },
+        {
+          id: `fw_${Date.now()}_4`,
+          arabic: activeDialect === 'iraqi' ? 'شكو ماكو؟' : 'ما الأخبار؟',
+          arabicTashkeel: activeDialect === 'iraqi' ? 'شِكُو مَاكُو؟' : 'مَا الأَخْبَارُ؟',
+          kurdishBadini: 'چ هەیە چ نینە؟ چ دەنگوباسە؟',
+          kurdishSorani: 'چ باسە؟ چ هەواڵە؟',
+          kurdishPhonetic: 'شکۆ ماکۆ؟',
+          english: "What's up? / Any news?",
+          usageContext: 'سڵاوکردن و هەواڵپرسینی دۆستانەی گەرمی عێراقی',
+          exampleArabic: 'هلو حبيبي، شكو ماكو اليوم بالدوام؟',
+          exampleKurdish: 'سڵاو ئازیزم، چ باس و خواستە ئەمڕۆ لە دەوام؟',
+        },
+        {
+          id: `fw_${Date.now()}_5`,
+          arabic: activeDialect === 'iraqi' ? 'فدوة لعينك' : 'فداك روحي',
+          arabicTashkeel: activeDialect === 'iraqi' ? 'فَدْوَة لِعِينِك' : 'فِدَاكَ رُوحِي',
+          kurdishBadini: 'قوربانت بم / فیدای چاڤێت تە بم',
+          kurdishSorani: 'قوربانت بم / قەزات لە گیانم',
+          kurdishPhonetic: 'فەدووە لعەینەک',
+          english: 'Bless your heart / dear friend',
+          usageContext: 'دەربڕینی خۆشەویستی و سۆزی بەرز لە قسەکردندا',
+          exampleArabic: 'تسلم يا غالي، فدوة لعينك ما قصرت',
+          exampleKurdish: 'سوپاس ئەی بەڕێز، قوربانت بم کەمیت نەکرد',
+        }
+      ];
+      setGeneratedWords(fallbackList);
+      StorageService.addXP(10);
     } finally {
       setIsGeneratingWords(false);
     }
